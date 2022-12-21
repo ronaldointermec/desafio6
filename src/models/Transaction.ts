@@ -12,7 +12,6 @@ import Category from './Category';
 
 @Entity('transactions')
 class Transaction {
-
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -21,7 +20,6 @@ class Transaction {
 
   @Column()
   type: 'income' | 'outcome';
-  // type: string;
 
   @Column('decimal')
   value: number;
@@ -29,13 +27,9 @@ class Transaction {
   @Column()
   category_id: string;
 
-  // @ManyToOne(() => Category)
-  // @JoinColumn({ name: 'category_id' })
-  // category: Category;
-
-  @ManyToOne((type) => Category, (category) => category.id)
-  @JoinColumn({ name: 'category_id'})
-  category: Category
+  @ManyToOne(() => Category, category => category.id)
+  @JoinColumn({ name: 'category_id' })
+  category: Category;
 
   @CreateDateColumn()
   created_at: Date;

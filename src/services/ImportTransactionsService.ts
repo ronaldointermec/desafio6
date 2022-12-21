@@ -6,10 +6,10 @@ import TransactionsRepository from '../repositories/TransactionsRepository';
 import Category from '../models/Category';
 
 interface CSVTransaction {
-  title: string,
-  type: 'income' | 'outcome',
-  value: number,
-  category: string,
+  title: string;
+  type: 'income' | 'outcome';
+  value: number;
+  category: string;
 }
 
 class ImportTransactionsService {
@@ -71,8 +71,8 @@ class ImportTransactionsService {
         value: transaction.value,
         category: finalCategories.find(
           category => category.title === transaction.category,
-        )
-      }))
+        ),
+      })),
     );
 
     await transactionsRepository.save(createdTransactions);
