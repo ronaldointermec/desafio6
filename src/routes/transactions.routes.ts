@@ -1,6 +1,5 @@
 import { Router } from 'express';
-import { getRepository } from 'typeorm';
-import Transaction from '../models/Transaction';
+import { getCustomRepository } from 'typeorm';
 
 import TransactionsRepository from '../repositories/TransactionsRepository';
 import CreateTransactionService from '../services/CreateTransactionService';
@@ -10,14 +9,18 @@ import ImportTransactionsService from '../services/ImportTransactionsService';
 const transactionsRouter = Router();
 
 transactionsRouter.get('/', async (request, response) => {
-  const transactionRepository = new TransactionsRepository();
 
-  const transactions = await getRepository(Transaction)
-    .createQueryBuilder('transaction')
-    .innerJoinAndSelect("transaction.category", "category")
-    .getMany();
+  const transactionsBalance=  getCustomRepository(TransactionsRepository)
 
-  const balance = await transactionRepository.getBalance();
+  const transactions = await getCustomRepository(TransactionsRepository)
+  .createQueryBuilder('transaction')
+  .innerJoinAndSelect("transaction.category", "category")
+  .getMany();
+  
+ // const transactions = await transactionsRepository.find();
+
+
+  const balance = await transactionsBalance.getBalance();
 
   return response.json({ transactions, balance });
 
@@ -27,8 +30,8 @@ transactionsRouter.post('/', async (request, response) => {
 
   const { title, type, value, category } = request.body;
 
-  const createTransactionService = new CreateTransactionService();
-  const transacation = await createTransactionService.execute({ title, type, value, category });
+  const createTransaction = new CreateTransactionService();
+  const transacation = await createTransaction.execute({ title, type, value, category });
 
   return response.json(transacation);
 
@@ -36,8 +39,8 @@ transactionsRouter.post('/', async (request, response) => {
 
 transactionsRouter.delete('/:id', async (request, response) => {
   const { id } = request.params;
-  const deleteTransactionService = new DeleteTransactionService();
-  await deleteTransactionService.execute(id);
+  const deleteTransaction = new DeleteTransactionService();
+  await deleteTransaction.execute(id);
   return response.status(204).send()
 
 });

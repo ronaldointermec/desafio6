@@ -5,10 +5,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  OneToOne,
-  OneToMany, 
   JoinColumn,
- } from 'typeorm';
+} from 'typeorm';
 
 import Category from './Category';
 
@@ -25,8 +23,8 @@ class Transaction {
   type: 'income' | 'outcome';
   // type: string;
 
-  @Column()
-  value: string;
+  @Column('decimal')
+  value: number;
 
   @Column()
   category_id: string;
@@ -34,6 +32,7 @@ class Transaction {
   // @ManyToOne(() => Category)
   // @JoinColumn({ name: 'category_id' })
   // category: Category;
+
   @ManyToOne((type) => Category, (category) => category.id)
   @JoinColumn({ name: 'category_id'})
   category: Category
