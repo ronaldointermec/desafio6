@@ -16,10 +16,11 @@ const transactionsRouter = Router();
 transactionsRouter.get('/', async (request, response) => {
   const transactionsBalance = getCustomRepository(TransactionsRepository);
 
-  const transactions = await getCustomRepository(TransactionsRepository)
-    .createQueryBuilder('transaction')
-    .innerJoinAndSelect('transaction.category', 'category')
-    .getMany();
+  const transactions = await getCustomRepository(TransactionsRepository).find();
+  // .createQueryBuilder('transaction')
+  // .innerJoinAndSelect('transaction.category', 'category')
+  // .getMany();
+
   const balance = await transactionsBalance.getBalance();
 
   return response.json({ transactions, balance });
